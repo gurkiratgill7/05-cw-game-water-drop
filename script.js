@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- GAME STATE & CONSTANTS ---
     let gameState = {};
-    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 0.9, JOURNEY_DURATION = 25000, OBSTACLE_INTERVAL = 1800, SICKNESS_CHANCE = 0.6;
+    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 0.9, JOURNEY_DURATION = 30000, OBSTACLE_INTERVAL = 1800, SICKNESS_CHANCE = 0.6;
     let journeyIntervals = [], playerVelocityY = 0, isJumping = false, isJourneyActive = false, dayChoices = {};
 
     function init() {
@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const obs = document.createElement('div'); obs.className = 'obstacle';
         obs.style.left = `${gameContainer.offsetWidth}px`;
         obs.style.backgroundImage = `url('img/rock-${Math.floor(Math.random() * 4) + 1}.png')`;
+        obs.style.bottom = '12%'; // Lower the obstacle a few pixels (was likely 16% or default)
         screens.journey.appendChild(obs);
     }
 
