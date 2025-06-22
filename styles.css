@@ -1,145 +1,186 @@
-/* Charity: water Brand Colors & Fonts
-
-Primary Colors:
-- Yellow:     #FFC907
-- Blue:       #2E9DF7
-
-Secondary Colors:
-- Light Blue: #8BD1CB
-- Green:      #4FCB53
-- Orange:     #FF902A
-- Red:        #F5402C
-- Dark Green: #159A48
-- Pink:       #F16061
-
-Fonts:
-- Proxima Nova
-- Avenir
-
-*/
-
+/* General Setup */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-}
-
-.game-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.score-panel {
-    display: flex;
-    justify-content: space-between;  /* Space between score and button */
-    align-items: center;
-    width: 800px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.timer {
-    flex: 0 1 auto;
-    font-size: 24px;
-    font-weight: bold;
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #333;
 }
 
 #game-container {
-    width: 800px;
-    height: 600px;
-    background-color: #e6f7ff;
-    border: 2px solid #333;
-    border-radius: 8px;
     position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 800px; /* Max width for desktop */
+    max-height: 600px; /* Max height for desktop */
+    margin: auto;
+    background-image: url('img/background.jpg');
+    background-size: cover;
+    background-position: center;
     overflow: hidden;
+    border: 2px solid #111;
 }
 
-
-#start-btn {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#start-btn:hover {
-    background-color: #45a049;
-}
-
-.score {
-    flex: 0 1 auto;  /* Don't grow, can shrink, auto basis */
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.water-drop {
+.screen {
+    width: 100%;
+    height: 100%;
     position: absolute;
-    width: 60px;  /* increased from 40px */
-    height: 60px; /* increased from 40px */
-    background-color: #0099ff;
-    border-radius: 50%;
-    animation: dropFall linear forwards;
-    transform-origin: center;
+    top: 0;
+    left: 0;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* HUD (Heads-Up Display) */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 100;
+}
+
+/* Buttons and UI Elements */
+.btn {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    background-color: #FFC907; /* Charity: Water Yellow */
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    padding: 15px;  /* Add padding for larger click area */
-    margin: -15px;  /* Offset padding to maintain visual size */
-    transition: transform 0.1s ease;  /* Smooth hover effect */
+    margin-top: 15px;
+    transition: transform 0.1s, background-color 0.2s;
+    text-decoration: none;
 }
 
-.water-drop:hover {
-    transform: scale(1.1);  /* Slight grow effect on hover */
+.btn:hover {
+    transform: scale(1.05);
 }
 
-.bad-drop {
-    background-color: #ff4444;
+.btn:disabled {
+    background-color: #777;
+    color: #ccc;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.game-title {
-    color: #131313;
-    font-size: 48px;
-    margin-top: 0;
-    margin-bottom: 5px;  /* reduced from 20px */
-    text-align: center;
-}
+/* --- Screen Specific Styles --- */
 
-.game-tagline {
-    color: #666;
-    font-size: 18px;
+/* Start Screen */
+#start-screen {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+}
+#start-screen .logo {
+    max-width: 150px;
     margin-bottom: 20px;
-    text-align: center;
+}
+#start-screen h1 { font-size: 3em; }
+#start-screen p { font-size: 1.2em; max-width: 80%; }
+
+/* Journey Screen */
+#journey-screen {
+    background: none; /* Uses container's background */
+}
+#ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 15%; /* Ground level */
+    background-color: transparent; /* Or a ground texture */
+}
+#player {
+    position: absolute;
+    bottom: 15%; /* Starts on the ground */
+    left: 50px;
+    width: 60px;
+    height: 90px;
+    background-image: url('img/stickman-running-1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: transform 0.3s ease-out;
+}
+#player.jump {
+    /* The jump motion will be handled by JS for precise control */
+    background-image: url('img/stickman-jump.png');
 }
 
-@keyframes dropFall {
-    from {
-        transform: translateY(-20px);
-    }
-    to {
-        transform: translateY(600px);
-    }
+.obstacle {
+    position: absolute;
+    bottom: 15%;
+    width: 50px;
+    height: 50px;
+    background-image: url('img/rock-1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
-@media (max-width: 850px) {
-    .game-wrapper, .score-panel, #game-container {
-        width: 95vw;
-    }
-    
-    #game-container {
-        height: 70vh;
-    }
+/* Allocation Screen */
+#allocation-screen .house-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('img/house.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+}
+#allocation-screen .allocation-ui {
+    position: relative;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+}
+.choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+/* Modal Screens (Summary & Game Over) */
+.modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 200;
+}
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 90%;
+    color: #333;
+}
+.fact {
+    margin-top: 20px;
+    font-style: italic;
+    color: #555;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
 }

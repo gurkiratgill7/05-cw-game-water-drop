@@ -2,24 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Drop Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>The Last Drop</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="game-wrapper">
-        <h1 class="game-title">Water Drop</h1>
-        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
-        <div class="score-panel">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="timer">Time: <span id="time">30</span>s</div>
-            <button id="start-btn">Start Game</button>
+    <div id="game-container">
+        <!-- The main heads-up display, always visible -->
+        <div id="hud">
+            <div class="hud-item">Day: <span id="day-stat">0</span></div>
+            <div class="hud-item">Health: <span id="health-stat">100</span>%</div>
+            <div class="hud-item">Water: <span id="water-stat">0.0</span>L</div>
+        </div>
+
+        <!-- 1. Start Screen -->
+        <div id="start-screen" class="screen">
+            <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo">
+            <h1>The Last Drop</h1>
+            <p>For millions, the search for clean water is a daily struggle. Can you survive?</p>
+            <button id="start-game-btn" class="btn">Start Day 1</button>
+        </div>
+
+        <!-- 2. Journey Screen (Runner Game) -->
+        <div id="journey-screen" class="screen">
+            <div id="player"></div>
+            <div id="ground"></div>
+        </div>
+
+        <!-- 3. Allocation Screen (Decision Making) -->
+        <div id="allocation-screen" class="screen">
+            <div class="house-background"></div>
+            <div class="allocation-ui">
+                <h2>Back at Home</h2>
+                <p>You returned with <span id="water-budget">0.0</span>L of water. Spend it wisely.</p>
+                <div class="choices">
+                    <button class="btn choice-btn" id="drink-btn" data-cost="1.0">Drink (Cost: 1.0L)</button>
+                    <button class="btn choice-btn" id="crops-btn" data-cost="2.0">Water Crops (Cost: 2.0L)</button>
+                    <button class="btn choice-btn" id="hygiene-btn" data-cost="1.0">Hygiene (Cost: 1.0L)</button>
+                </div>
+                <p class="status-info">Crop Health: <span id="crop-stat">50</span>%</p>
+                <button id="finish-day-btn" class="btn">Finish Day</button>
+            </div>
+        </div>
+
+        <!-- 4. Day Summary Screen (Modal) -->
+        <div id="summary-screen" class="screen modal">
+            <div class="modal-content">
+                <h2 id="summary-title">End of Day <span id="summary-day"></span></h2>
+                <p id="summary-text"></p>
+                <p class="fact"><strong>Did you know?</strong> 1 in 10 people worldwide lack access to clean water.</p>
+                <button id="next-day-btn" class="btn">Start Next Day</button>
+            </div>
         </div>
         
-        <div id="game-container">
+        <!-- 5. Game Over Screen -->
+        <div id="game-over-screen" class="screen modal">
+            <div class="modal-content">
+                <h2>Game Over</h2>
+                <p id="game-over-reason"></p>
+                <p>You survived for <span id="final-days">0</span> days.</p>
+                <p class="fact">This is a daily reality for millions. You can help make a difference.</p>
+                <a href="https://www.charitywater.org/" target="_blank" class="btn">Learn More at charity: water</a>
+                <button id="play-again-btn" class="btn">Play Again</button>
+            </div>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
