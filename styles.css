@@ -54,7 +54,6 @@ html, body {
     background-size: contain; background-repeat: no-repeat;
     transition: transform 0.3s ease-out;
 }
-#player.jump { background-image: url('img/stickman-jump.png'); }
 #player.standing { background-image: url('img/stickman-running-1.png'); }
 
 /* NEW: End of Journey House */
@@ -80,13 +79,7 @@ html, body {
     background-size: contain; background-repeat: no-repeat;
 }
 
-/* Allocation Screen */
-#allocation-screen .house-background {
-    position: absolute; width: 100%; height: 100%;
-    background-image: url('img/house.png');
-    background-size: contain; background-position: center; background-repeat: no-repeat;
-    opacity: 0.3;
-}
+
 #allocation-screen .allocation-ui {
     position: relative; z-index: 10;
     background-color: rgba(0, 0, 0, 0.75);
