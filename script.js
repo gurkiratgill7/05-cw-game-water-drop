@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- GAME STATE & CONSTANTS ---
     let gameState = {};
-    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 0.9, JOURNEY_DURATION = 30000, OBSTACLE_INTERVAL = 1800, SICKNESS_CHANCE = 0.6;
+    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 1.0, JOURNEY_DURATION = 25000, OBSTACLE_INTERVAL = 2200, SICKNESS_CHANCE = 0.6;
     let journeyIntervals = [], playerVelocityY = 0, isJumping = false, isJourneyActive = false, dayChoices = {};
 
     function init() {
@@ -25,13 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function switchScreen(screenName) { Object.values(screens).forEach(screen => screen.classList.remove('active')); if (screens[screenName]) screens[screenName].classList.add('active'); }
 
-    // ##### THE BUG FIX IS IN THIS FUNCTION #####
     function startGame() {
         if (gameState.isGameOver) return;
         gameState.day++;
-        // FIX: Reset water status at the start of every new day
-        gameState.isWaterClean = false; 
-
         isJourneyActive = true;
         endHouse.classList.remove('visible');
         player.classList.remove('standing');
@@ -49,13 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
         journeyIntervals = [runAnim, obstacleSpawner, journeyTimer];
         requestAnimationFrame(journeyLoop);
     }
-
+    
+    // ##### THE BUG FIX IS IN THIS FUNCTION #####
     function journeyLoop() {
         if (!isJourneyActive) return;
+
         if (isJumping) {
-            playerVelocityY -= GRAVITY; player.style.bottom = `${parseFloat(player.style.bottom) + playerVelocityY}px`;
-            if (parseFloat(player.style.bottom) <= 16) { player.style.bottom = '16%'; isJumping = false; player.classList.remove('jump'); }
+            playerVelocityY -= GRAVITY;
+            let currentBottom = parseFloat(player.style.bottom);
+            let nextBottom = currentBottom + playerVelocityY;
+
+            // Check if the next position will be at or below the ground
+            if (nextBottom <= 16) {
+                player.style.bottom = '16%'; // Clamp to ground
+                isJumping = false;
+                playerVelocityY = 0; // Reset velocity
+                player.classList.remove('jump');
+            } else {
+                player.style.bottom = `${nextBottom}px`; // Apply new position
+            }
         }
+
         document.querySelectorAll('.obstacle').forEach(obstacle => {
             obstacle.style.left = `${obstacle.offsetLeft - 5}px`;
             const pRect = player.getBoundingClientRect(), oRect = obstacle.getBoundingClientRect();
@@ -81,8 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleFilterChoice(shouldFilter) {
-        if (shouldFilter) { gameState.water *= 0.75; gameState.isWaterClean = true; }
-        else { gameState.isWaterClean = false; }
+        if (shouldFilter) {
+            gameState.water *= 0.75;
+            gameState.isWaterClean = true;
+        } else {
+            gameState.isWaterClean = false;
+        }
         updateHUD();
         setupAllocation();
         switchScreen('allocation');
@@ -123,31 +137,51 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
+    
     function finishDay() {
         let summary = "";
         if (dayChoices.drank) {
-            summary += "You managed to drink today. ";
-            if (!gameState.isWaterClean && Math.random() < SICKNESS_CHANCE) { gameState.health -= 35; summary += "But the dirty water made you violently ill! "; }
-            else { gameState.health = Math.min(100, gameState.health + 5); }
-        } else { gameState.health -= 25; summary += "You went the whole day without drinking. Dehydration is setting in. "; }
-
-        if (dayChoices.cooked) {
-            if (gameState.cropHealth >= 20) { gameState.health = Math.min(100, gameState.health + 15); gameState.cropHealth -= 10; summary += "You cooked a decent meal. "; }
-            else { gameState.health -= 10; summary += "You cooked, but had almost no food to prepare. "; }
-        } else { gameState.health -= 15; summary += "With no water to cook, you went hungry. "; }
-        
-        if (dayChoices.wateredCrops) { gameState.cropHealth = Math.min(100, gameState.cropHealth + 25); summary += "The crops were watered. "; }
-        else { gameState.cropHealth -= 20; summary += "The crops are dry and wilting. "; }
-        
-        if (dayChoices.washed) { summary += "You washed your hands, staving off other illnesses. "; }
-        else { gameState.health -= 10; summary += "Poor hygiene adds to your health troubles. "; }
-
-        gameState.cropHealth = Math.max(0, gameState.cropHealth);
-        gameState.health = Math.max(0, gameState.health);
+             summary += "You managed to drink today. ";
+            if (!gameState.isWaterClean && Math.random() < SICKNESS_CHANCE) { 
+                gameState.health -= 35; 
+                summary += "But the dirty water made you violently ill! "; 
+            } else {
+                gameState.health = Math.min(100, gameState.health + 10); 
+            } 
+        } else { 
+            gameState.health -= 25; 
+            summary += "You went the whole day without drinking. Dehydration is setting in. "; 
+        }
+        if (dayChoices.cooked) { 
+            if (gameState.cropHealth >= 20) { 
+                gameState.health = Math.min(100, gameState.health + 15); 
+                gameState.cropHealth -= 10; 
+                summary += "You cooked a decent meal. "; 
+            } else { 
+                gameState.health -= 15; 
+                summary += "You cooked, but had almost no food to prepare. "; 
+            } 
+        } else { 
+            gameState.health -= 15; 
+            summary += "With no water to cook, you went hungry. "; 
+        }
+        if (dayChoices.wateredCrops) { 
+            gameState.cropHealth = Math.min(100, gameState.cropHealth + 25); 
+            summary += "The crops were watered. "; 
+        } else { 
+            gameState.cropHealth -= 20; 
+            summary += "The crops are dry and wilting. "; 
+        }
+        if (dayChoices.washed) { 
+            gameState.health = Math.min(100, gameState.health + 5);
+            summary += "You washed your hands, staving off other illnesses. "; 
+        } else { 
+            gameState.health -= 10; 
+            summary += "Poor hygiene adds to your health troubles. "; 
+        }
+        gameState.cropHealth = Math.max(0, gameState.cropHealth); gameState.health = Math.max(0, gameState.health);
         summaryUI.day.textContent = gameState.day; summaryUI.text.textContent = summary;
-        switchScreen('summary');
-        updateHUD();
+        switchScreen('summary'); updateHUD();
         if (gameState.health <= 0) { gameOver("Your health reached zero."); }
     }
 
@@ -167,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const obs = document.createElement('div'); obs.className = 'obstacle';
         obs.style.left = `${gameContainer.offsetWidth}px`;
         obs.style.backgroundImage = `url('img/rock-${Math.floor(Math.random() * 4) + 1}.png')`;
-        obs.style.bottom = '12%'; // Lower the obstacle a few pixels (was likely 16% or default)
         screens.journey.appendChild(obs);
     }
 
