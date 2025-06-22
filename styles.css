@@ -17,8 +17,8 @@ html, body {
     position: relative;
     width: 100%;
     height: 100%;
-    max-width: 800px; /* Max width for desktop */
-    max-height: 600px; /* Max height for desktop */
+    max-width: 800px;
+    max-height: 600px;
     margin: auto;
     background-image: url('img/background.jpg');
     background-size: cover;
@@ -33,12 +33,13 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    display: none; /* Hidden by default */
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     padding: 20px;
+    color: white;
 }
 
 .screen.active {
@@ -55,19 +56,18 @@ html, body {
     justify-content: space-around;
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 1.2em;
+    font-size: clamp(12px, 2.5vw, 16px);
     font-weight: bold;
     z-index: 100;
 }
 
 /* Buttons and UI Elements */
 .btn {
-    padding: 12px 25px;
-    font-size: 1.2em;
+    padding: 12px 20px; /* Adjusted padding for grid */
+    font-size: 1em;
     font-weight: bold;
     color: #333;
-    background-color: #FFC907; /* Charity: Water Yellow */
+    background-color: #FFC907;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -90,32 +90,18 @@ html, body {
 /* --- Screen Specific Styles --- */
 
 /* Start Screen */
-#start-screen {
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-}
-#start-screen .logo {
-    max-width: 150px;
-    margin-bottom: 20px;
-}
+#start-screen { background-color: rgba(0, 0, 0, 0.6); }
+#start-screen .logo { max-width: 150px; margin-bottom: 20px; }
 #start-screen h1 { font-size: 3em; }
 #start-screen p { font-size: 1.2em; max-width: 80%; }
 
 /* Journey Screen */
-#journey-screen {
-    background: none; /* Uses container's background */
-}
-#ground {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 15%; /* Ground level */
-    background-color: transparent; /* Or a ground texture */
-}
+#journey-screen { background: none; }
+#ground { position: absolute; bottom: 0; left: 0; width: 100%; height: 15%; }
 #player {
     position: absolute;
-    bottom: 15%; /* Starts on the ground */
+    /* FIX: Adjusted from 15% to 16% to lift the character slightly above the ground line */
+    bottom: 16%;
     left: 50px;
     width: 60px;
     height: 90px;
@@ -124,63 +110,52 @@ html, body {
     background-repeat: no-repeat;
     transition: transform 0.3s ease-out;
 }
-#player.jump {
-    /* The jump motion will be handled by JS for precise control */
-    background-image: url('img/stickman-jump.png');
-}
+#player.jump { background-image: url('img/stickman-jump.png'); }
 
 .obstacle {
     position: absolute;
     bottom: 15%;
     width: 50px;
     height: 50px;
-    background-image: url('img/rock-1.png');
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 /* Allocation Screen */
 #allocation-screen .house-background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: absolute; width: 100%; height: 100%;
     background-image: url('img/house.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: contain; background-position: center; background-repeat: no-repeat;
     opacity: 0.3;
 }
 #allocation-screen .allocation-ui {
-    position: relative;
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 30px;
+    position: relative; z-index: 10;
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 20px 40px;
     border-radius: 15px;
 }
 .choices {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    /* FIX: Changed to a 3x2 grid layout */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px; /* Row gap and Column gap */
     margin: 20px 0;
 }
-
-/* Modal Screens (Summary & Game Over) */
-.modal {
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 200;
+.choices .btn {
+    margin-top: 0; /* Remove top margin for grid items */
 }
+#drink-dirty-btn {
+    background-color: #F5402C;
+    color: white;
+}
+
+/* Modal Screens */
+.modal { background-color: rgba(0, 0, 0, 0.8); z-index: 200; }
 .modal-content {
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 90%;
-    color: #333;
+    background: #fff; padding: 30px; border-radius: 10px;
+    max-width: 90%; color: #333;
 }
 .fact {
-    margin-top: 20px;
-    font-style: italic;
-    color: #555;
-    border-top: 1px solid #ddd;
-    padding-top: 15px;
+    margin-top: 20px; font-style: italic; color: #555;
+    border-top: 1px solid #ddd; padding-top: 15px;
 }

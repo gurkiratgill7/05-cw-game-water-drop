@@ -12,11 +12,12 @@
         <div id="hud">
             <div class="hud-item">Day: <span id="day-stat">0</span></div>
             <div class="hud-item">Health: <span id="health-stat">100</span>%</div>
-            <div class="hud-item">Water: <span id="water-stat">0.0</span>L</div>
+            <div class="hud-item">Dirty H₂O: <span id="dirty-water-stat">0.0</span>L</div>
+            <div class="hud-item">Clean H₂O: <span id="clean-water-stat">0.0</span>L</div>
         </div>
 
         <!-- 1. Start Screen -->
-        <div id="start-screen" class="screen">
+        <div id="start-screen" class="screen active">
             <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo">
             <h1>The Last Drop</h1>
             <p>For millions, the search for clean water is a daily struggle. Can you survive?</p>
@@ -34,11 +35,15 @@
             <div class="house-background"></div>
             <div class="allocation-ui">
                 <h2>Back at Home</h2>
-                <p>You returned with <span id="water-budget">0.0</span>L of water. Spend it wisely.</p>
+                <p>You returned with <span id="water-budget">0.0</span>L of dirty water.</p>
+                <!-- UPDATED 3x2 Grid Layout -->
                 <div class="choices">
-                    <button class="btn choice-btn" id="drink-btn" data-cost="1.0">Drink (Cost: 1.0L)</button>
-                    <button class="btn choice-btn" id="crops-btn" data-cost="2.0">Water Crops (Cost: 2.0L)</button>
-                    <button class="btn choice-btn" id="hygiene-btn" data-cost="1.0">Hygiene (Cost: 1.0L)</button>
+                    <button class="btn choice-btn" id="filter-btn" data-cost="2.0">Filter Water (Cost: 2.0L Dirty)</button>
+                    <button class="btn choice-btn" id="drink-clean-btn" data-cost="1.0">Drink Clean Water (Cost: 1.0L Clean)</button>
+                    <button class="btn choice-btn" id="drink-dirty-btn" data-cost="1.0">Drink Dirty Water (Cost: 1.0L Dirty)</button>
+                    <button class="btn choice-btn" id="cook-btn" data-cost="1.5">Cook Food (Cost: 1.5L Dirty)</button>
+                    <button class="btn choice-btn" id="crops-btn" data-cost="1.0">Water Crops (Cost: 1.0L Dirty)</button>
+                    <button class="btn choice-btn" id="hygiene-btn" data-cost="1.0">Hygiene (Cost: 1.0L Dirty)</button>
                 </div>
                 <p class="status-info">Crop Health: <span id="crop-stat">50</span>%</p>
                 <button id="finish-day-btn" class="btn">Finish Day</button>
@@ -50,7 +55,7 @@
             <div class="modal-content">
                 <h2 id="summary-title">End of Day <span id="summary-day"></span></h2>
                 <p id="summary-text"></p>
-                <p class="fact"><strong>Did you know?</strong> 1 in 10 people worldwide lack access to clean water.</p>
+                <p class="fact"><strong>Did you know?</strong> Contaminated water is a leading source of diseases like cholera and dysentery.</p>
                 <button id="next-day-btn" class="btn">Start Next Day</button>
             </div>
         </div>
