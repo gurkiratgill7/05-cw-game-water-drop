@@ -1,124 +1,83 @@
 /* General Setup */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box; margin: 0; padding: 0;
 }
-
 html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #333;
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #333;
 }
-
 #game-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    max-width: 800px;
-    max-height: 600px;
-    margin: auto;
+    position: relative; width: 100%; height: 100%;
+    max-width: 800px; max-height: 600px; margin: auto;
     background-image: url('img/background.jpg');
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-    border: 2px solid #111;
+    background-size: cover; background-position: center;
+    overflow: hidden; border: 2px solid #111;
 }
-
 .screen {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    color: white;
+    width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+    display: none; flex-direction: column; justify-content: center;
+    align-items: center; text-align: center; padding: 20px; color: white;
 }
+.screen.active { display: flex; }
 
-.screen.active {
-    display: flex;
-}
-
-/* HUD (Heads-Up Display) */
+/* HUD */
 #hud {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    font-size: clamp(12px, 2.5vw, 16px);
-    font-weight: bold;
-    z-index: 100;
+    position: absolute; top: 0; left: 0; width: 100%;
+    display: flex; justify-content: space-around;
+    padding: 10px; background-color: rgba(0, 0, 0, 0.6);
+    font-size: clamp(12px, 2.5vw, 16px); font-weight: bold; z-index: 100;
 }
 
-/* Buttons and UI Elements */
+/* Buttons */
 .btn {
-    padding: 12px 20px; /* Adjusted padding for grid */
-    font-size: 1em;
-    font-weight: bold;
-    color: #333;
-    background-color: #FFC907;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 15px;
+    padding: 12px 20px; font-size: 1.1em; font-weight: bold;
+    color: #333; background-color: #FFC907;
+    border: none; border-radius: 8px; cursor: pointer;
+    margin-top: 15px; text-decoration: none;
     transition: transform 0.1s, background-color 0.2s;
-    text-decoration: none;
 }
-
-.btn:hover {
-    transform: scale(1.05);
-}
-
-.btn:disabled {
-    background-color: #777;
-    color: #ccc;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* --- Screen Specific Styles --- */
+.btn:hover { transform: scale(1.05); }
+.btn:disabled { background-color: #777; color: #ccc; cursor: not-allowed; transform: none; }
+.risky-btn { background-color: #F5402C; color: white; }
 
 /* Start Screen */
 #start-screen { background-color: rgba(0, 0, 0, 0.6); }
 #start-screen .logo { max-width: 150px; margin-bottom: 20px; }
 #start-screen h1 { font-size: 3em; }
-#start-screen p { font-size: 1.2em; max-width: 80%; }
 
 /* Journey Screen */
 #journey-screen { background: none; }
 #ground { position: absolute; bottom: 0; left: 0; width: 100%; height: 15%; }
 #player {
-    position: absolute;
-    /* FIX: Adjusted from 15% to 16% to lift the character slightly above the ground line */
-    bottom: 16%;
-    left: 50px;
-    width: 60px;
-    height: 90px;
+    position: absolute; bottom: 16%; left: 50px; width: 60px; height: 90px;
     background-image: url('img/stickman-running-1.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-size: contain; background-repeat: no-repeat;
     transition: transform 0.3s ease-out;
 }
 #player.jump { background-image: url('img/stickman-jump.png'); }
+#player.standing { background-image: url('img/stickman-running-1.png'); }
 
-.obstacle {
+/* NEW: End of Journey House */
+#end-house {
     position: absolute;
     bottom: 15%;
-    width: 50px;
-    height: 50px;
+    right: -250px; /* Start off-screen */
+    width: 200px;
+    height: 200px;
+    background-image: url('img/house.png');
     background-size: contain;
     background-repeat: no-repeat;
+    opacity: 0;
+    transition: right 1.5s ease-out, opacity 1s ease-out;
+}
+#end-house.visible {
+    right: 150px; /* Animate to this position */
+    opacity: 1;
+}
+
+.obstacle {
+    position: absolute; bottom: 15%; width: 50px; height: 50px;
+    background-size: contain; background-repeat: no-repeat;
 }
 
 /* Allocation Screen */
@@ -131,31 +90,17 @@ html, body {
 #allocation-screen .allocation-ui {
     position: relative; z-index: 10;
     background-color: rgba(0, 0, 0, 0.75);
-    padding: 20px 40px;
-    border-radius: 15px;
+    padding: 20px 40px; border-radius: 15px;
 }
 .choices {
-    /* FIX: Changed to a 3x2 grid layout */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 20px; /* Row gap and Column gap */
-    margin: 20px 0;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 15px 20px; margin: 20px 0;
 }
-.choices .btn {
-    margin-top: 0; /* Remove top margin for grid items */
-}
-#drink-dirty-btn {
-    background-color: #F5402C;
-    color: white;
-}
+.choices .btn { margin-top: 0; }
 
 /* Modal Screens */
 .modal { background-color: rgba(0, 0, 0, 0.8); z-index: 200; }
 .modal-content {
     background: #fff; padding: 30px; border-radius: 10px;
     max-width: 90%; color: #333;
-}
-.fact {
-    margin-top: 20px; font-style: italic; color: #555;
-    border-top: 1px solid #ddd; padding-top: 15px;
 }
