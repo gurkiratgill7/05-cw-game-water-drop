@@ -44,6 +44,11 @@ html, body {
 #start-screen { background-color: rgba(0, 0, 0, 0.6); }
 #start-screen .logo { max-width: 150px; margin-bottom: 20px; }
 #start-screen h1 { font-size: 3em; }
+.difficulty-selection { margin: 20px 0; }
+.difficulty-selection h3 { margin-bottom: 15px; font-size: 1.2em; }
+.difficulty-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.difficulty-btn { margin-top: 0; padding: 10px 15px; font-size: 0.9em; }
+.difficulty-btn.selected { background-color: #28a745; color: white; }
 
 /* Journey Screen */
 #journey-screen { background: none; }

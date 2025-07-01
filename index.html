@@ -20,7 +20,15 @@
             <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo">
             <h1>The Last Drop</h1>
             <p>For millions, the search for clean water is a daily struggle. Can you survive?</p>
-            <button id="start-game-btn" class="btn">Start Day 1</button>
+            <div class="difficulty-selection">
+                <h3>Choose Difficulty:</h3>
+                <div class="difficulty-buttons">
+                    <button id="easy-btn" class="btn difficulty-btn" data-difficulty="easy">Easy (20s)</button>
+                    <button id="medium-btn" class="btn difficulty-btn" data-difficulty="medium">Medium (30s)</button>
+                    <button id="hard-btn" class="btn difficulty-btn" data-difficulty="hard">Hard (45s)</button>
+                </div>
+            </div>
+            <button id="start-game-btn" class="btn" disabled>Start Day 1</button>
         </div>
 
         <!-- 2. Journey Screen (Runner Game) -->

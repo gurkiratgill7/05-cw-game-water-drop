@@ -10,23 +10,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const summaryUI = { day: document.getElementById('summary-day'), text: document.getElementById('summary-text') };
     const gameOverUI = { reason: document.getElementById('game-over-reason'), finalDays: document.getElementById('final-days') };
     const buttons = { start: document.getElementById('start-game-btn'), nextDay: document.getElementById('next-day-btn'), playAgain: document.getElementById('play-again-btn') };
+    const difficultyButtons = { easy: document.getElementById('easy-btn'), medium: document.getElementById('medium-btn'), hard: document.getElementById('hard-btn') };
 
     // --- GAME STATE & CONSTANTS ---
     let gameState = {};
-    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 1.0, JOURNEY_DURATION = 25000, OBSTACLE_INTERVAL = 2200, SICKNESS_CHANCE = 0.6;
+    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 1.0, SICKNESS_CHANCE = 0.6;
+    const DIFFICULTY_SETTINGS = {
+        easy: { duration: 20000, obstacleInterval: 3000, randomSpawn: false },
+        medium: { duration: 30000, obstacleInterval: 2200, randomSpawn: false },
+        hard: { duration: 45000, obstacleInterval: 1500, randomSpawn: true, minSpawnGap: 1000 }
+    };
     let journeyIntervals = [], playerVelocityY = 0, isJumping = false, isJourneyActive = false, dayChoices = {};
+    let selectedDifficulty = null, lastObstacleSpawn = 0;
 
     function init() {
         gameState = { day: 0, health: 100, water: 0, cropHealth: 50, isWaterClean: false, isGameOver: false };
+        selectedDifficulty = null;
         endHouse.classList.remove('visible');
         switchScreen('start');
         updateHUD();
+        updateStartButton();
+    }
+
+    function selectDifficulty(difficulty) {
+        selectedDifficulty = difficulty;
+        Object.values(difficultyButtons).forEach(btn => btn.classList.remove('selected'));
+        difficultyButtons[difficulty].classList.add('selected');
+        updateStartButton();
+    }
+
+    function updateStartButton() {
+        buttons.start.disabled = !selectedDifficulty;
     }
 
     function switchScreen(screenName) { Object.values(screens).forEach(screen => screen.classList.remove('active')); if (screens[screenName]) screens[screenName].classList.add('active'); }
 
     function startGame() {
-        if (gameState.isGameOver) return;
+        if (gameState.isGameOver || !selectedDifficulty) return;
         gameState.day++;
         isJourneyActive = true;
         endHouse.classList.remove('visible');
@@ -36,12 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startJourney() {
+        const difficulty = DIFFICULTY_SETTINGS[selectedDifficulty];
         gameState.water = 5.0; isJumping = false; playerVelocityY = 0; player.style.bottom = '16%';
+        lastObstacleSpawn = 0;
         updateHUD();
         document.querySelectorAll('.obstacle').forEach(obs => obs.remove());
         const runAnim = setInterval(() => { player.style.backgroundImage = player.style.backgroundImage.includes('1') ? "url('img/stickman-running-2.png')" : "url('img/stickman-running-1.png')"; }, 150);
-        const obstacleSpawner = setInterval(createObstacle, OBSTACLE_INTERVAL);
-        const journeyTimer = setTimeout(endJourney, JOURNEY_DURATION);
+        
+        let obstacleSpawner;
+        if (difficulty.randomSpawn) {
+            obstacleSpawner = setInterval(() => {
+                const now = Date.now();
+                if (now - lastObstacleSpawn >= difficulty.minSpawnGap) {
+                    if (Math.random() < 0.7) { // 30% chance to spawn each interval
+                        createObstacle();
+                        lastObstacleSpawn = now;
+                    }
+                }
+            }, 500); // Check every 500ms for random spawning
+        } else {
+            obstacleSpawner = setInterval(createObstacle, difficulty.obstacleInterval);
+        }
+        
+        const journeyTimer = setTimeout(endJourney, difficulty.duration);
         journeyIntervals = [runAnim, obstacleSpawner, journeyTimer];
         requestAnimationFrame(journeyLoop);
     }
@@ -70,8 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
             obstacle.style.left = `${obstacle.offsetLeft - 5}px`;
             const pRect = player.getBoundingClientRect(), oRect = obstacle.getBoundingClientRect();
             if (pRect.right > oRect.left && pRect.left < oRect.right && pRect.bottom > oRect.top && pRect.top < oRect.bottom) {
-                obstacle.remove(); gameState.water = Math.max(0, gameState.water - 0.5); updateHUD();
-                if (gameState.water === 0 && !gameState.isGameOver) gameOver("You lost all your water during the journey.");
+                // Check if player is on the ground (collision while not jumping high enough)
+                const playerBottom = parseFloat(player.style.bottom);
+                if (playerBottom <= 25) { // Player is close to ground level, penalize for collision
+                    obstacle.remove(); 
+                    gameState.water = Math.max(0, gameState.water - 0.25); 
+                    updateHUD();
+                    if (gameState.water === 0 && !gameState.isGameOver) gameOver("You lost all your water during the journey.");
+                }
+                else {
+                    obstacle.remove();
+                    gameState.water = Math.max(0, gameState.water - 0.25); 
+                    updateHUD();
+                    if (gameState.water === 0 && !gameState.isGameOver) gameOver("You lost all your water during the journey.");
+
+                }
             }
             if (obstacle.offsetLeft < -50) obstacle.remove();
         });
@@ -215,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     filterChoiceUI.useDirtyBtn.addEventListener('click', () => handleFilterChoice(false));
     allocationUI.finishDayBtn.addEventListener('click', finishDay);
     Object.values(allocationUI).forEach(btn => { if (btn.dataset.cost) btn.addEventListener('click', () => handleAllocation(btn)); });
+    Object.values(difficultyButtons).forEach(btn => btn.addEventListener('click', () => selectDifficulty(btn.dataset.difficulty)));
     gameContainer.addEventListener('click', handleJump);
     window.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); handleJump(); } });
 
