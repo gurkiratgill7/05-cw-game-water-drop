@@ -58,7 +58,6 @@ html, body {
     background-size: contain; background-repeat: no-repeat;
     transition: transform 0.3s ease-out;
 }
-#player.jump { background-image: url('img/stickman-jump.png'); }
 #player.standing { background-image: url('img/stickman-running-1.png'); }
 #end-house {
     position: absolute; bottom: 15%; right: -250px;
