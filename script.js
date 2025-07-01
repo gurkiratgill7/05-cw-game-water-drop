@@ -57,7 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function startJourney() {
         const difficulty = DIFFICULTY_SETTINGS[selectedDifficulty];
-        gameState.water = 5.0; isJumping = false; playerVelocityY = 0; player.style.bottom = '16%';
+        gameState.water = 5.0; 
+        gameState.isWaterClean = false; // Reset water to dirty at start of each journey
+        isJumping = false; playerVelocityY = 0; player.style.bottom = '16%';
         lastObstacleSpawn = 0;
         updateHUD();
         document.querySelectorAll('.obstacle').forEach(obs => obs.remove());

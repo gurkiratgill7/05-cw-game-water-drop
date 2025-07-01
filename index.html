@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>The Last Drop</title>
+    
+    <!-- GOOGLE FONTS LINK -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -31,14 +37,12 @@
             <button id="start-game-btn" class="btn" disabled>Start Day 1</button>
         </div>
 
-        <!-- 2. Journey Screen (Runner Game) -->
+        <!-- The rest of the HTML is unchanged -->
         <div id="journey-screen" class="screen">
             <div id="player"></div>
             <div id="end-house"></div>
             <div id="ground"></div>
         </div>
-
-        <!-- 3. Filter Choice Screen (Modal) -->
         <div id="filter-choice-screen" class="screen modal">
             <div class="modal-content">
                 <h2>The Water is Dirty</h2>
@@ -50,8 +54,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- 4. Allocation Screen (Decision Making) -->
         <div id="allocation-screen" class="screen">
             <div class="house-background"></div>
             <div class="allocation-ui">
@@ -67,8 +69,6 @@
                 <button id="finish-day-btn" class="btn">Finish Day</button>
             </div>
         </div>
-
-        <!-- 5. Day Summary Screen (Modal) -->
         <div id="summary-screen" class="screen modal">
             <div class="modal-content">
                 <h2 id="summary-title">End of Day <span id="summary-day"></span></h2>
@@ -76,8 +76,6 @@
                 <button id="next-day-btn" class="btn">Start Next Day</button>
             </div>
         </div>
-        
-        <!-- 6. Game Over Screen -->
         <div id="game-over-screen" class="screen modal">
             <div class="modal-content">
                 <h2>Game Over</h2>

@@ -4,7 +4,9 @@
 }
 html, body {
     width: 100%; height: 100%; overflow: hidden;
-    font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #333;
+    /* FONT CHANGE: Replaced 'Helvetica Neue' with 'Montserrat' */
+    font-family: 'Montserrat', sans-serif; 
+    background-color: #333;
 }
 #game-container {
     position: relative; width: 100%; height: 100%;
@@ -25,12 +27,15 @@ html, body {
     position: absolute; top: 0; left: 0; width: 100%;
     display: flex; justify-content: space-around;
     padding: 10px; background-color: rgba(0, 0, 0, 0.6);
-    font-size: clamp(12px, 2.5vw, 16px); font-weight: bold; z-index: 100;
+    font-size: clamp(12px, 2.5vw, 16px); font-weight: 700; /* Bold */
+    z-index: 100;
 }
 
 /* Buttons */
 .btn {
-    padding: 12px 20px; font-size: 1.1em; font-weight: bold;
+    padding: 12px 20px; font-size: 1.1em;
+    /* FONT CHANGE: Ensure all buttons use the bold font weight */
+    font-weight: 700;
     color: #333; background-color: #FFC907;
     border: none; border-radius: 8px; cursor: pointer;
     margin-top: 15px; text-decoration: none;
@@ -43,11 +48,11 @@ html, body {
 /* Start Screen */
 #start-screen { background-color: rgba(0, 0, 0, 0.6); }
 #start-screen .logo { max-width: 150px; margin-bottom: 20px; }
-#start-screen h1 { font-size: 3em; }
+#start-screen h1 { font-size: 3em; font-weight: 700; }
 .difficulty-selection { margin: 20px 0; }
-.difficulty-selection h3 { margin-bottom: 15px; font-size: 1.2em; }
+.difficulty-selection h3 { margin-bottom: 15px; font-size: 1.2em; font-weight: 700; }
 .difficulty-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-.difficulty-btn { margin-top: 0; padding: 10px 15px; font-size: 0.9em; }
+.difficulty-btn { margin-top: 0; padding: 10px 15px; font-size: 0.9em; font-weight: 700; }
 .difficulty-btn.selected { background-color: #28a745; color: white; }
 
 /* Journey Screen */
@@ -89,7 +94,7 @@ html, body {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 15px 20px; margin: 20px 0;
 }
-.choices .btn { margin-top: 0; }
+.choices .btn { margin-top: 0; font-weight: 700; }
 
 /* Modal Screens */
 .modal { background-color: rgba(0, 0, 0, 0.8); z-index: 200; }
@@ -97,3 +102,4 @@ html, body {
     background: #fff; padding: 30px; border-radius: 10px;
     max-width: 90%; color: #333;
 }
+.modal-content h2 { font-weight: 700; }
