@@ -15,11 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- GAME STATE & CONSTANTS ---
     let gameState = {};
-    const PLAYER_JUMP_VELOCITY = 22, GRAVITY = 1.0, SICKNESS_CHANCE = 0.6;
+    const PLAYER_JUMP_VELOCITY = 23, GRAVITY = 0.9, SICKNESS_CHANCE = 0.6;
     const DIFFICULTY_SETTINGS = {
         easy: { duration: 20000, obstacleInterval: 3000, randomSpawn: false },
         medium: { duration: 30000, obstacleInterval: 2200, randomSpawn: false },
-        hard: { duration: 46500, obstacleInterval: 1500, randomSpawn: true, minSpawnGap: 1000 }
+        hard: { duration: 48000, obstacleInterval: 1500, randomSpawn: true, minSpawnGap: 1000 }
     };
     let journeyIntervals = [], playerVelocityY = 0, isJumping = false, isJourneyActive = false, dayChoices = {};
     let selectedDifficulty = null, lastObstacleSpawn = 0;
@@ -78,12 +78,12 @@ document.addEventListener('DOMContentLoaded', () => {
             obstacleSpawner = setInterval(() => {
                 const now = Date.now();
                 if (now - lastObstacleSpawn >= difficulty.minSpawnGap) {
-                    if (Math.random() < 0.6) { // 60% chance to spawn each interval
+                    if (Math.random() < 0.5) { // 50% chance to spawn each interval
                         createObstacle();
                         lastObstacleSpawn = now;
                     }
                 }
-            }, 400); // Check every 400ms for random spawning
+            }, 500); // Check every 500ms for random spawning
         } else {
             obstacleSpawner = setInterval(createObstacle, difficulty.obstacleInterval);
         }
