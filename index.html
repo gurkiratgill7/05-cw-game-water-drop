@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>The Last Drop</title>
-    
-    <!-- GOOGLE FONTS LINK -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,8 +15,9 @@
             <div class="hud-item">Water: <span id="water-stat">0.0</span>L (<span id="water-type-stat"></span>)</div>
         </div>
 
-        <!-- 1. Start Screen -->
+        <!-- Start Screen -->
         <div id="start-screen" class="screen active">
+            <!-- (Content is unchanged) -->
             <img src="img/cw_logo.png" alt="Charity Water Logo" class="logo">
             <h1>The Last Drop</h1>
             <p>For millions, the search for clean water is a daily struggle. Can you survive?</p>
@@ -37,13 +32,17 @@
             <button id="start-game-btn" class="btn" disabled>Start Day 1</button>
         </div>
 
-        <!-- The rest of the HTML is unchanged -->
+        <!-- Journey Screen -->
         <div id="journey-screen" class="screen">
+            <!-- (Content is unchanged) -->
             <div id="player"></div>
             <div id="end-house"></div>
             <div id="ground"></div>
         </div>
+
+        <!-- Filter Choice Screen -->
         <div id="filter-choice-screen" class="screen modal">
+            <!-- (Content is unchanged) -->
             <div class="modal-content">
                 <h2>The Water is Dirty</h2>
                 <p>You collected <span id="collected-water-stat">0.0</span>L of water, but it's contaminated. Drinking it is risky.</p>
@@ -54,7 +53,22 @@
                 </div>
             </div>
         </div>
+        
+        <!-- NEW: Neighbor Event Screen -->
+        <div id="neighbor-event-screen" class="screen modal">
+            <div class="modal-content">
+                <h2>A Neighbor Needs Help</h2>
+                <p>Your neighbor's child is sick. They are out of water and ask if you can spare 1.0L of your supply. It might mean you go without something important.</p>
+                <div class="choices">
+                    <button id="share-water-btn" class="btn safe-btn">Share 1.0L of Water</button>
+                    <button id="refuse-water-btn" class="btn risky-btn">Refuse, you need it</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Allocation Screen -->
         <div id="allocation-screen" class="screen">
+            <!-- (Content is unchanged) -->
             <div class="house-background"></div>
             <div class="allocation-ui">
                 <h2>Back at Home</h2>
@@ -69,7 +83,10 @@
                 <button id="finish-day-btn" class="btn">Finish Day</button>
             </div>
         </div>
+
+        <!-- Day Summary and Game Over Screens -->
         <div id="summary-screen" class="screen modal">
+             <!-- (Content is unchanged) -->
             <div class="modal-content">
                 <h2 id="summary-title">End of Day <span id="summary-day"></span></h2>
                 <p id="summary-text"></p>
@@ -77,6 +94,7 @@
             </div>
         </div>
         <div id="game-over-screen" class="screen modal">
+            <!-- (Content is unchanged) -->
             <div class="modal-content">
                 <h2>Game Over</h2>
                 <p id="game-over-reason"></p>
@@ -86,7 +104,6 @@
             </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
